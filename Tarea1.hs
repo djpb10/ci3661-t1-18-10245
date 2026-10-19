@@ -114,8 +114,17 @@ duracion s1 s2 =
 -- =====================================================================
 
 -- B1
+-- Usamos foldr para ir extrayendo los elementos uno a uno
+-- Una vez teniendo la estructura completa la funcion lambda se encarga
+-- se sumar los numeros que cumplen la condicion o dejarla igual.
+-- Si no consigue alguno, la cuenta es 0.0 y retorna nothing, Just en caso contrario.
+
 promedioSobreUmbral :: Double -> [Double] -> Maybe Double
-promedioSobreUmbral = undefined
+promedioSobreUmbral umbral xs =
+  let (suma, cuenta) = foldr (\x (s, c) -> if x > umbral then (s + x, c + 1) else (s, c)) (0.0, 0.0) xs
+  in if cuenta == 0.0
+    then Nothing
+    else Just (suma / cuenta)
 
 -- B2
 movimientosCaballo :: (Int, Int) -> [(Int, Int)]
