@@ -76,11 +76,36 @@ recorrido mayor menor (x:xs)
   | otherwise = recorrido mayor menor xs
 
 -- A3
-leerHora :: String -> Either String (Int, Int)
-leerHora = undefined
+-- Transformamos las componentes de una hora en formato correcto
+-- enteros con los cuales poder hacer operaciones 
 
+leerHora :: String -> Either String (Int, Int)
+leerHora [d1, d2, ':', m1, m2]
+  | not ( isDigit d1 && isDigit d2 && isDigit m1 && isDigit m2 ) = Left "formato inválido"
+  | digitToInt d1 * 10 + digitToInt d2 > 23                      = Left "hora fuera de rango"
+  | digitToInt m1 * 10 + digitToInt d2 > 59                      = Left "minutos fuera de rango"
+  | otherwise  = Right (digitToInt d1 * 10 + digitToInt d2, digitToInt m1 * 10 + digitToInt m2 )
+
+-- Dado que haskel revisa en orden y usa la primera que calse
+-- tenemos este caso donde el formato no concuerda de ninguna manera
+leerHora _ = Left "formato inválido"
+
+
+-- Anidamos case para lograr el flujo de verificacion 
+-- revisamos cada hora para luego realizar las comparaciones
+-- verificamos si una hora pertenece a otro dia y luego 
+-- realizamos el calculo de los minutos transcurridos
 duracion :: String -> String -> Either String Int
-duracion = undefined
+duracion s1 s2 =
+  case leerHora s1 of
+    Left error1 -> Left error1
+    Right (h1, m1) ->
+      case leerHora s2 of
+        Left error2 -> Left error2
+        Right (h2, m2) ->
+          if (h2 * 60 + m2) >= (h1 * 60 + m1)
+            then Right ((h2 * 60 + m2) - (h1 * 60 + m1))
+            else Right ((h2 * 60 + m2) + 1440 - (h1 * 60 + m1))
 
 -- =====================================================================
 -- Parte B: orden superior.
