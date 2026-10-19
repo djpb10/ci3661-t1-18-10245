@@ -55,10 +55,25 @@ voltear (x:xs) = voltear xs ++ [x]
 
 -- A2
 -- Explica aquí, en dos o tres líneas, por qué tu solución recorre la
--- lista una sola vez:
---
+-- lista una sola vez: Solo recorre la lista una vez porque en cada llamada
+-- recursiva solo se verifica 1 termino, en la primera llamada se toma 2 veces el primero
+-- para la segunda se compara con el segundo termino; sucesivamente se verifica alguna de 
+-- las guardias contra un solo elemento en la lista.
+
 mayorYMenor :: Ord a => [a] -> Maybe (a, a)
-mayorYMenor = undefined
+mayorYMenor []     = Nothing
+mayorYMenor (x:xs) = Just (recorrido x x (xs))
+
+-- Funcion para recorrer la lista comparando uno a uno los elemntos contra
+-- los elementos que tomamos en un principio, solo se visita a cada elemnto
+-- una unica vez porque se recuerdan los candidatos.
+
+recorrido :: Ord a => a -> a -> [a] -> (a,a)
+recorrido mayor menor []     = (mayor, menor)
+recorrido mayor menor (x:xs)
+  | x > mayor = recorrido x menor xs 
+  | x < menor = recorrido mayor x xs
+  | otherwise = recorrido mayor menor xs
 
 -- A3
 leerHora :: String -> Either String (Int, Int)
