@@ -34,7 +34,24 @@ import Data.Char (isAlphaNum, isDigit, toLower, digitToInt)
 
 -- A1
 esPalindromo :: String -> Bool
-esPalindromo = undefined
+esPalindromo x = reconstruir x == voltear (reconstruir x)
+
+
+-- Funcion para recontruir el String original
+-- eliminando todo lo que no sea letra o digito
+-- ademas lleva todo a minuscula
+
+reconstruir :: String -> String
+reconstruir []    = []
+reconstruir (x:xs) 
+  | isAlphaNum x  = toLower x : reconstruir xs
+  | otherwise     = reconstruir xs
+
+-- Funcion para voltear un String
+
+voltear :: String -> String
+voltear []     = []
+voltear (x:xs) = voltear xs ++ [x]
 
 -- A2
 -- Explica aquí, en dos o tres líneas, por qué tu solución recorre la
