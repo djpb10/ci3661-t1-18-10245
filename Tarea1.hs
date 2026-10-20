@@ -127,11 +127,28 @@ promedioSobreUmbral umbral xs =
     else Just (suma / cuenta)
 
 -- B2
-movimientosCaballo :: (Int, Int) -> [(Int, Int)]
-movimientosCaballo = undefined
+-- Nos da todos los movimientos posibles del caballo
+-- porque fijamso la regla y la lista por comprension se encarga
+-- de generar las combinaiones, generamos el conjunto base
+-- con el cambio de posiciones que puede lograr el caballos
 
+movimientosCaballo :: (Int, Int) -> [(Int, Int)]
+movimientosCaballo (r, c)=
+  [ (r + dr, c + dc) | (dr, dc) <- [(-2,-1), (-2,1), (-1,-2), (-1,2), (1,-2), (1,2), (2,-1), (2,1)]
+                                  , r + dr >= 1, r + dr <= 8
+                                  , c + dc >= 1, c + dc <= 8]
+
+-- Aqui tenemos dos generadores anidados
+-- El primero genera los posibles saltos en un movimiento posible
+-- El segundo genera los saltos a partir de los movimientos anteriores
+-- Como hay repetidos filtramos, `elem` nos permite
+-- saber si un elemento pertenece a una lista, asi descartamso
+-- duplicados
 enDosSaltos :: (Int, Int) -> Int
-enDosSaltos = undefined
+enDosSaltos casilla =
+  let todosLosSaltos = [ dest | salto1 <- movimientosCaballo casilla , dest <- movimientosCaballo salto1]
+      sinDuplicados = foldr (\x acc -> if x `elem` acc then acc else x : acc) [] todosLosSaltos
+  in length sinDuplicados
 
 -- B3
 miMap :: (a -> b) -> [a] -> [b]
