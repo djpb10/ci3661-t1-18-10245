@@ -5,7 +5,12 @@
 --  Carnet: 18-10245
 --
 --  Declaración de uso de herramientas de IA (obligatoria, ver enunciado):
+--  Utilicé dos herramientas Geminis y DeepSeek a traves del navegador
 --
+-- Las use para contrastar conceptos y metodologias. Me confundian algunas
+-- recursiones, el uso de Maybe, Either y el hecho de pasarle menos 
+-- argumentos a una funcion que en principio espera una cantidad especifica
+-- me genera otra funcion.
 -- =====================================================================
 --  No cambies el nombre del módulo ni la lista de exportación, ni las
 --  firmas de las funciones. Puedes agregar todas las funciones auxiliares
@@ -151,11 +156,28 @@ enDosSaltos casilla =
   in length sinDuplicados
 
 -- B3
+
+-- Recorre la lista de derecha a izquierda
+-- y construye una nueva lista donde cada elemnto 
+-- ha sido modificado por f pero se mantiene
+-- en la posicion original
+
 miMap :: (a -> b) -> [a] -> [b]
-miMap = undefined
+miMap f = foldr (\x acc -> f x : acc) []
+
+-- Recorrmos la lista de derecha a izquierda 
+-- construyendo una lista nueva donde cada elemento 
+-- cumple con la condicion
 
 miFilter :: (a -> Bool) -> [a] -> [a]
-miFilter = undefined
+miFilter p = foldr (\x acc -> if p x then x : acc else acc) []
+
+
+-- Para logar cambiar el orden de evaluacion buscamos que 
+-- foldr desempaquete la lista pero con la funcion lambda
+-- obligamos a que tenga que evaluar los elementos en 
+-- sentido contrario porque no puede calcular hasta que 
+-- acc logre recibir su valor
 
 miFoldl :: (b -> a -> b) -> b -> [a] -> b
-miFoldl = undefined
+miFoldl f z xs = foldr (\x g acc -> g (f acc x)) id xs z

@@ -1,0 +1,53 @@
+Problema 7:
+
+Sea mi carnet 18-10245 tomo d = [0, 2, 4, 5]
+
+a) foldr (-) 0 [0, 2, 4, 5]
+
+= (-) 0 (foldr (-) 0 [2, 4, 5])
+= (-) 0 ( (-) 2 (foldr (-) 0 [4, 5]))
+= (-) 0 ( (-) 2 ( (-) 4 (foldr (-) 0 [5])))
+= (-) 0 ( (-) 2 ( (-) 4 ( (-) 5 (foldr (-) 0 []))))
+= (-) 0 ( (-) 2 ( (-) 4 ( (-) 5 0)))
+= (-) 0 ( (-) 2 ( (-) 4 5))
+= (-) 0 ( (-) 2 (-1))
+= (-) 0 3)
+= -3
+
+b) foldl (-) 0 [0, 2, 4, 5]
+
+= foldl (-) ((-) 0 0) [2, 4, 5]
+= foldl (-) ((-) ((-) 0 0) 2) [4, 5]
+= foldl (-) ((-) ((-) ((-) 0 0) 2) 4) [5]
+= foldl (-) ((-) ((-) ((-) ((-) 0 0) 2) 4) 5) []
+= (-) ((-) ((-) ((-) 0 0) 2) 4) 5
+= (-) ((-) ((-) 0 2) 4) 5
+= (-) ((-) (-2) 4) 5
+= (-) (-6) 5
+= -11
+
+
+c) miFoldl (-) 0 [0, 2]
+
+= foldr (\x g acc -> g ((-) acc x)) id [0,2] 0
+= (\x g acc -> g ((-) acc x)) 0 (foldr (\x g acc -> g ((-) acc x)) id [2]) 0
+= (\x g acc -> g ((-) acc x)) 0 ((\x g acc -> g ((-) acc x)) 2 (foldr (\x g acc -> g ((-) acc x)) id [])) 0
+= (\x g acc -> g ((-) acc x)) 0 ((\x g acc -> g ((-) acc x)) 2 id) 0
+= (\x g acc -> g ((-) acc x)) 0 (\acc -> id ((-) acc 2)) 0
+= (\acc -> id ((-) acc 2)) ((-) 0 0)
+= (\acc -> id ((-) acc 2)) 0
+= id ((-) 0 2)
+= id (-2)
+= -2
+
+d) 
+
+Tenemos que (a) y (b) dan valores tan distintos porque la resta no es asociativa.
+Cuando llamamos a foldr estamos agrupando de derecha a izquierda con parentesis
+y luego con fldl estamos agrupando de izquierda a derecha, no hay asociatividad
+en la resta.
+
+Para que foldr op z xs == foldl op z xs para toda lista finita xs necesitamos 
+que la operacion op sea asociativa y que z sea un elemento neutro en ambas
+direcciones de asociacion, esto es, neutro a derecha e izquierda; como vimos
+en la clase03 tiene que ser un monoide
